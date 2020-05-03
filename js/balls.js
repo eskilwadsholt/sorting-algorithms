@@ -78,12 +78,12 @@ $("#advance").click(async function(event) {
 function updateWorst(val) {
     worst += val;
     $("#worst").text(`${comparisons + worst} / ${worstCase(n)}`);
-    $("#worst-total-bar").css({
+    $("#worst-total-bar").animate({
         width: comparisons + worst
-    });
-    $("#worst-diff-bar").css({
+    }, pause);
+    $("#worst-diff-bar").animate({
         width: worstCase(n) - (comparisons + worst)
-    });
+    }, pause);
 }
 
 function updateBest(val) {
@@ -92,9 +92,9 @@ function updateBest(val) {
     $("#best-total-bar").css({
         width: bestCase(n)
     });
-    $("#best-diff-bar").css({
+    $("#best-diff-bar").animate({
         width: comparisons + best - bestCase(n)
-    });
+    }, pause);
 }
 
 async function quickSort(low, high) {

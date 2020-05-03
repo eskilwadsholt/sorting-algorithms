@@ -88,7 +88,7 @@ button.disabled {
     border: 1px solid black;
 }
 #best-diff-bar {
-    height: 1em;
+    border-left: none;
     background: red;
 }
 #worst-bars {
@@ -96,6 +96,6 @@ button.disabled {
     justify-content: flex-end;
 }
 #worst-diff-bar {
-    height: 1em;
+    border-left: none;
     background: blue;
 }
