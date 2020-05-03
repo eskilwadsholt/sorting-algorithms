@@ -81,9 +81,11 @@ button.disabled {
     display: flex;
     justify-content: flex-start;
 }
-#best-total-bar {
+#best-total-bar, #worst-total-bar, #best-diff-bar, #worst-diff-bar {
+    box-sizing: border-box;
     height: 1em;
-    background: blue;
+    background: whitesmoke;
+    border: 1px solid black;
 }
 #best-diff-bar {
     height: 1em;
@@ -93,11 +95,7 @@ button.disabled {
     display: flex;
     justify-content: flex-end;
 }
-#worst-total-bar {
-    height: 1em;
-    background: green;
-}
 #worst-diff-bar {
     height: 1em;
-    background: silver;
+    background: blue;
 }

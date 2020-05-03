@@ -30,6 +30,12 @@ for (var i=0; i<n; i++) {
     balls[i].div = $(".ball").last();
 }
 
+$("#worst-bars").css({
+    width: worstCase(n)
+});
+$("#best-bars").css({
+    width: worstCase(n)
+});
 updateBest(0);
 updateWorst(0);
 
@@ -73,10 +79,10 @@ function updateWorst(val) {
     worst += val;
     $("#worst").text(`${comparisons + worst} / ${worstCase(n)}`);
     $("#worst-total-bar").css({
-        width: worstCase(n)
+        width: comparisons + worst
     });
     $("#worst-diff-bar").css({
-        width: comparisons + worst - worstCase(n)
+        width: worstCase(n) - (comparisons + worst)
     });
 }
 
