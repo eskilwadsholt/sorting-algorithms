@@ -77,3 +77,27 @@ button.disabled {
     display: flex;
     flex-direction: column;
 }
+#best-bars {
+    display: flex;
+    justify-content: flex-start;
+}
+#best-total-bar {
+    height: 1em;
+    background: blue;
+}
+#best-diff-bar {
+    height: 1em;
+    background: red;
+}
+#worst-bars {
+    display: flex;
+    justify-content: flex-end;
+}
+#worst-total-bar {
+    height: 1em;
+    background: green;
+}
+#worst-diff-bar {
+    height: 1em;
+    background: silver;
+}

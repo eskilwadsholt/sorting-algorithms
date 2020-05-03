@@ -72,11 +72,23 @@ $("#advance").click(async function(event) {
 function updateWorst(val) {
     worst += val;
     $("#worst").text(`${comparisons + worst} / ${worstCase(n)}`);
+    $("#worst-total-bar").css({
+        width: worstCase(n)
+    });
+    $("#worst-diff-bar").css({
+        width: comparisons + worst - worstCase(n)
+    });
 }
 
 function updateBest(val) {
     best += val;
     $("#best").text(`${comparisons + best} / ${bestCase(n)}`);
+    $("#best-total-bar").css({
+        width: bestCase(n)
+    });
+    $("#best-diff-bar").css({
+        width: comparisons + best - bestCase(n)
+    });
 }
 
 async function quickSort(low, high) {
