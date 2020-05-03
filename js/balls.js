@@ -1,12 +1,14 @@
 var pivot;
 var balls = [];
 var n = 30;
-var swapTime = 50;
-var pause = 80;
+var swapTime = 100;
+var pause = 150;
 var swaps = 0;
 var comparisons = 0;
 var ballRadius = 12;
 var ballMargin = 8;
+var best = bestCase(n);
+var worst = worstCase(n);
 
 // Fill list of balls random numbers
 for (var i=1; i<=n; i++) {
@@ -27,6 +29,9 @@ for (var i=0; i<n; i++) {
         }));
     balls[i].div = $(".ball").last();
 }
+
+updateBest(0);
+updateWorst(0);
 
 $(".numbering").css({
     "font-size": 0.85 * ballRadius + "pt"
@@ -64,6 +69,16 @@ $("#advance").click(async function(event) {
     event.stopImmediatePropagation();
 });
 
+function updateWorst(val) {
+    worst += val;
+    $("#worst").text(`${comparisons + worst} / ${worstCase(n)}`);
+}
+
+function updateBest(val) {
+    best += val;
+    $("#best").text(`${comparisons + best} / ${bestCase(n)}`);
+}
+
 async function quickSort(low, high) {
     if (low > 0 || high < n - 1) {
         $(balls.slice(low, high + 1)).each((i, ball) => {
@@ -86,10 +101,24 @@ async function quickSort(low, high) {
     await choosePivot(low, high);
     var i = await partition(low, high, pivot);
     await sleep(pause);
+    updateBest(-bestCase(high + 1 - low) + bestCase(i - low) + bestCase(high - i));
+    updateWorst(-worstCase(high + 1 - low) + worstCase(i - low) + worstCase(high - i));
     if (low < i - 1) await quickSort(low, i - 1);
     else $(balls[low].div).attr("class", "ball done");
     if (i + 1 < high) await quickSort(i + 1, high);
     else $(balls[high].div).attr("class", "ball done");
+}
+
+function worstCase(k) {
+    if (k <= 1) return 0;
+    return k * (k - 1) / 2;
+}
+
+function bestCase(k) {
+    if (k <= 1) return 0;
+    var lower = (k - 1) % 2 == 0 ? (k - 1) / 2 : (k - 2) / 2;
+    var upper = k - 1 - lower;
+    return k - 1 + bestCase(lower) + bestCase(upper);
 }
 
 function choosePivot(low, high) {
