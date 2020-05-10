@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>QuickSort using jQuery</title>
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id=columns>
+            <div id="rows">
+                <div class="top-row">
+                    <div class="stats">
+                        <div class="stat-title">Sample size</div>
+                        <div class="stat-value" id="size"></div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-title">Swaps</div>
+                        <div class="stat-value" id="swaps">0</div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-title">Comparisons</div>
+                        <div class="stat-value" id="comparisons">0</div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-title">Divide and Conquer</div>
+                        <div class="stat-value" id="division">0 / 0</div>
+                    </div>
+                    <div id="progress-bars">
+                        <div id="min-bar"></div>
+                        <div id="lost-bar"></div>
+                        <div id="range-bar"></div>
+                        <div id="gained-bar"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="popup">
+                        <div class="popup__tip"></div>
+                        <div class="popup__window">
+                            <div class="popup__close-button">&#10006;</div>
+                            <div class="popup__body"></div>
+                        </div>
+                    </div>
+                    <div id="balls"></div>
+                </div>
+            </div>
+            <div id="pseudo-code">
+                <div id="buttons">
+                    <button id="advance">QuickSort</button>
+                    <button id="restart">Restart</button>
+                </div>
+                <div id="algorithms">
+                    <div class="algorithm">
+                        <div class="code-block">
+                            QuickSort(A, low, high)
+                            <div class="code-block">
+                                <div class="code-line" id="random-index">
+                                    index &#129060; random(low, high)
+                                </div>
+                                <div class="code-line" id="swap-to-high">
+                                    swap A[index] and A[high]
+                                </div>
+                                i &#129060; Partition(A, low, high)
+                                if low < i - 1
+                                <div class="code-block">QuickSort(low, i - 1)</div>
+                                if i + 1 < high
+                                <div class="code-block">QuickSort(i + 1, high)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm">
+                        <div class="code-block">
+                            Parition(A, low, high)
+                            <div class="code-block">
+                                pivot &#129060; A[high]<br>
+                                i &#129060; low
+                                for j from low to (high - 1)
+                                <div class="code-block">
+                                    if A[j] < pivot
+                                    <div class="code-block">
+                                        swap A[i] and A[j]<br>
+                                        i &#129060; i + 1
+                                    </div>
+                                </div>
+                                swap A[i] and A[high]<br>
+                                return i
+                            </div>
+                        </div>
+                    </div>
+                    <div class="algorithm">
+                        <div class="code-block">
+                            Human version
+                            <ol>
+                                <li><div class="human active" id="human-choose-pivot">Choose random pivot ball</div></li>
+                                <li><div class="human" id="human-partition">Partition rest into smaller vs. not</div></li>
+                                <li><div class="human" id="human-place-pivot">Place pivot based on partitions</div></li>
+                                <li><div class="human" id="human-repeat">Repeat for each partition</div></li>
+                            </ol>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="js/balls.js"></script>
+</html>

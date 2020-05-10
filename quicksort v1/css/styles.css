@@ -1,0 +1,218 @@
+* {
+    font-size: 11pt;
+}
+#columns {
+    display: grid;
+    grid-template-columns: 5fr 2fr;
+}
+#rows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.row {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+}
+.top-row {
+    position: relative;
+}
+.stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+.stat-title {
+    background-image: linear-gradient(to right, blue, transparent);
+    margin: 3px;
+    padding: 3px;
+    font-weight: bold;
+    color: white;
+}
+.stat-value {
+    margin: 3px;
+    padding: 3px;
+    border-left: 2px solid gray;
+}
+#balls {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+.ball {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 13px;
+    color: white;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px blue;
+    z-index: 10;
+}
+.ball.pivot {
+    background: green;
+    box-shadow: 0 0 5px black;
+}
+.ball.less {
+    background: blue;
+    box-shadow: 0 0 5px black;
+}
+.ball.more {
+    background: red;
+    box-shadow: 0 0 5px black;
+}
+.ball.done {
+    background: whitesmoke;
+    color: gray;
+    box-shadow: 0 0 5px black;
+}
+.ball.clone {
+    z-index: 5;
+    opacity: 0.2;
+}
+button {
+    right: 0;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 10pt;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 20px;
+    background: #60a3bc;
+}
+button.disabled {
+    color: gray;
+    pointer-events: none;
+}
+#buttons {
+    display: flex;
+    flex-direction: column;
+}
+#pseudo-code {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.code-block {
+    margin-top: 2px;
+    padding: 5px;
+    border-radius: 5px 0 0 5px;
+    margin-left: 1.5em;
+    font-weight: bold;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+}
+.comment {
+    color: gray;
+    font-weight: normal;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+}
+.algorithm {
+    font-weight: bold;
+}
+#algorithms {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.human.active {
+    background-image: linear-gradient(to right, rgba(0, 150, 0, 0.5), rgba(255, 0, 0, 0));
+}
+
+#progress-bars {
+    width: 100%;
+    border: 1px solid black;
+    margin: 3px;
+    margin-top: 20px;
+    height: 1em;
+    display: flex;
+}
+#min-bar {
+    background: lightgray;
+    height: 100%;
+}
+#lost-bar {
+    background: rgba(255, 0, 0, 0.5);
+    height: 100%;
+}
+#range-bar {
+    height: 100%;
+}
+#gained-bar {
+    background: rgba(0, 128, 0, 0.5);
+    height: 100%;
+}
+.popup__tip {
+    position: absolute;
+    display: block;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid darkgray; 
+    border-left: 5px solid transparent;
+    content: '';
+    height: 0;
+    width: 0;
+    top: 0;
+    left: 50%;
+    box-sizing: border-box;
+}
+.popup {
+    position: absolute;
+    transform-origin: top center;
+    background: lightblue;
+    top: 80px;
+    left: 50%;
+    transform: scale(0);
+    transition: 400ms ease-in-out;
+    z-index: 100;
+}
+.popup__window {
+    position: absolute;
+    padding: 5px;
+    border-radius: 15px;
+    background: lightblue;
+    border: 2px solid darkgray;
+    box-sizing: border-box;
+}
+.popup--active {
+    transform: scale(1);
+    transition: 400ms ease-in-out;
+}
+.popup--active::before {
+    transform: translate(-50%, -100%) scale(1);
+    transition: transform 4000ms ease-in-out;
+}
+.popup__close-button {
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+    padding-top: 3px;
+    border-radius: 5px;
+    height: 15px;
+    width: 15px;
+    color: white;
+    border: 2px solid white;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup__body {
+    margin: 14px 14px 0 0;
+}

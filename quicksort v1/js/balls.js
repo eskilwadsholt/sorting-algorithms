@@ -1,14 +1,18 @@
 var pivot;
 var balls = [];
-var n = 30;
-var swapTime = 100;
-var pause = 150;
+var n = 50;
+var swapTime = 40;
+var pause = 40;
 var swaps = 0;
 var comparisons = 0;
-var ballRadius = 12;
-var ballMargin = 8;
+var ballRadius = 10;
+var ballMargin = 3;
 var best = bestCase(n);
 var worst = worstCase(n);
+var allBest = best;
+var allWorst = worst;
+var divisionRate = 1;
+var divisionWeight = 0;
 
 // Fill list of balls random numbers
 for (var i=1; i<=n; i++) {
@@ -30,12 +34,6 @@ for (var i=0; i<n; i++) {
     balls[i].div = $(".ball").last();
 }
 
-$("#worst-bars").css({
-    width: worstCase(n)
-});
-$("#best-bars").css({
-    width: worstCase(n)
-});
 updateBest(0);
 updateWorst(0);
 
@@ -43,8 +41,7 @@ $(".numbering").css({
     "font-size": 0.85 * ballRadius + "pt"
 });
 
-$("#size").html(`${n} (n &times; n = ${n * n},
-    n log n = ${(n * Math.log2(n)).toFixed(2)})`);
+$("#size").html(`${n} (\\(n^2=${n * n}\\) and \\(n\\log n=${(n * Math.log2(n)).toFixed(1)}\\))`);
 
 function increaseSwaps() {
     $("#swaps").text(++swaps);
@@ -56,18 +53,25 @@ function increaseComparisons() {
 
 $("#restart").click(() => {
     location.reload();
-    console.log("restarting");
 });
 
 
 
 $("#advance").click(async function(event) {
-    $("#advance").addClass("disabled");
+    $(".popup__body").html(`
+        <div>This is a test</div>
+        <div class="ball>
+            <div class="numbering>
+                123
+            </div>
+        </div>
+    `);
+    //$(".popup").addClass("popup--active");
     await quickSort(0, n - 1);
     await sleep(pause);
     $(".ball.clone").animate({
         opacity: 0
-    }, 500);
+    }, 1000);
     await $(".ball.clone").promise();
     $(".ball").animate({
         top: 3 * ballRadius
@@ -77,24 +81,36 @@ $("#advance").click(async function(event) {
 
 function updateWorst(val) {
     worst += val;
-    $("#worst").text(`${comparisons + worst} / ${worstCase(n)}`);
-    $("#worst-total-bar").animate({
-        width: comparisons + worst
-    }, pause);
-    $("#worst-diff-bar").animate({
-        width: worstCase(n) - (comparisons + worst)
-    }, pause);
+    var gained = allWorst - (comparisons + worst);
+    var range = worst - best;
+    $("#gained-bar").css({
+        width: gained / allWorst  * 100 + "%"
+    });
+    $("#range-bar").css({
+        width: range / allWorst  * 100 + "%"
+    });
 }
 
 function updateBest(val) {
     best += val;
-    $("#best").text(`${comparisons + best} / ${bestCase(n)}`);
-    $("#best-total-bar").css({
-        width: bestCase(n)
+    var lost = comparisons + best - allBest;
+    var range = worst - best;
+    $("#min-bar").css({
+        width: allBest / allWorst * 100 + "%"
     });
-    $("#best-diff-bar").animate({
-        width: comparisons + best - bestCase(n)
+    $("#lost-bar").css({
+        width: lost / allWorst * 100 + "%"
     }, pause);
+    $("#range-bar").css({
+        width: range / allWorst  * 100 + "%"
+    });
+}
+
+function updateDivision(division, relevance) {
+    divisionWeight += relevance / n;
+    divisionRate *= Math.pow(Math.max(division, 1 - division), relevance / n);
+    var rate = 100 * Math.pow(divisionRate, 1 / divisionWeight);
+    $("#division").text(`${rate.toFixed(0)}% / ${(100 - rate).toFixed(0)}%`);
 }
 
 async function quickSort(low, high) {
@@ -121,6 +137,8 @@ async function quickSort(low, high) {
     await sleep(pause);
     updateBest(-bestCase(high + 1 - low) + bestCase(i - low) + bestCase(high - i));
     updateWorst(-worstCase(high + 1 - low) + worstCase(i - low) + worstCase(high - i));
+    updateDivision( (i - low) / (high - low), high - low);
+    console.log((i - low) + " / " + (high - low));
     if (low < i - 1) await quickSort(low, i - 1);
     else $(balls[low].div).attr("class", "ball done");
     if (i + 1 < high) await quickSort(i + 1, high);
@@ -144,8 +162,6 @@ function choosePivot(low, high) {
         var pivotIndex = low + randInt(high - low + 1);
         pivot = balls[pivotIndex];
         pivot.div.addClass("pivot");
-        console.log(`Index: ${pivotIndex}`);
-        console.log(`Pivot: ${pivot.val}`);
         await animateSwap(pivotIndex, high, swapTime);
         await sleep(pause);
         resolve();
@@ -153,7 +169,6 @@ function choosePivot(low, high) {
 }
 
 async function partition(low, high, pivot) {
-    console.log(`partition(${low}, ${high})`);
     var i = low;
     for (var j=low; j < high; j++) {
         increaseComparisons();
@@ -179,15 +194,7 @@ function sleep(ms) {
     return new Promise(resolve => { setTimeout(resolve, ms)});
 }
 
-
-
 $.extend($.easing, {
-    sin: function(x, t, b, c, d) {
-        return b + c * Math.sin(Math.PI * x);
-    },
-    cos: function(x, t, b, c, d) {
-        return b + c / 2 - c / 2 * Math.cos(Math.PI * x);
-    },
     sinUp: function(x, t, b, c, d) {
         return b + c * Math.sin(Math.PI * x / 2);
     },
@@ -209,7 +216,6 @@ function animateSwap(i1, i2, ms) {
             var y2 = parseInt($b.css("top"));
             var radius = Math.min(Math.abs(x2 - x1) / 2, 2 * ballRadius + ballMargin);
             duration = Math.max(0, ms * (i2 - i1 - 2) / 3);
-            console.log(duration);
             $a.animate({
                 left: [`+=${radius}`, 'sinDown'],
                 top: [`-=${radius}`, 'sinUp']
@@ -243,7 +249,6 @@ function animateSwap(i1, i2, ms) {
             await $a.promise();
             await $b.promise();
         }
-        console.log("animation is done");
         resolve();
     });
 }
